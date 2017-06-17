@@ -24,8 +24,18 @@ const App = {
   },
   cacheDOM: function (){
     this.root = document.querySelector(this.rootElement);
+    this.colorButtons = this.root.querySelectorAll('button.color');
+    this.gridOutput = this.root.querySelector('.grid-output');
   },
-  bindEvents: function(){},
+  bindEvents: function(){
+    this.colorButtons.forEach(btn => {
+      const newColor = btn.classList[1];
+      btn.addEventListener('click', () => this.setColor(newColor));
+    });
+  },
+  setColor: function(newColor){
+    this.selectedColor = newColor;
+  },
   changeColor: function(rowIndex, colIndex){
     const cell = this.grid[rowIndex][colIndex];
     cell.color = this.selectedColor;
@@ -37,12 +47,12 @@ const App = {
     this.render();
   },
   render: function(){
-    this.root.innerHTML = '';
+    this.gridOutput.innerHTML = '';
     // this is the dynamic reset button
     const resetButton = document.createElement('button');
     resetButton.textContent = 'reset';
     resetButton.addEventListener('click', () => this.resetGrid());
-    this.root.appendChild(resetButton);
+    this.gridOutput.appendChild(resetButton);
 
     // this is the grid
     this.grid.forEach((row, rowIndex) => {
@@ -53,7 +63,7 @@ const App = {
         element.addEventListener('click', () => this.changeColor(rowIndex, colIndex));
         rowContainer.appendChild(element);
       });
-      this.root.appendChild(rowContainer);
+      this.gridOutput.appendChild(rowContainer);
     });
   }
 };
